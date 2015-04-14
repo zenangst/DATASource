@@ -24,22 +24,18 @@ class ViewController: UITableViewController {
     request.sortDescriptors = [NSSortDescriptor(key: "name",
       ascending: true)]
 
-    delay(0.1) {
-      self.tableView.dataSource = DATASource(
-        tableView: self.tableView,
-        fetchRequest: request,
-        cellIdentifier: "Cell",
-        mainContext: self.dataStack.mainContext,
-        configuration: { (cell, item, indexPath) -> Void in
-          let cell = cell as! UITableViewCell
-          cell.textLabel!.text = "Hi"
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))),
+      dispatch_get_main_queue(), {
+        self.tableView.dataSource = DATASource(
+          tableView: self.tableView,
+          fetchRequest: request,
+          cellIdentifier: "Cell",
+          mainContext: self.dataStack.mainContext,
+          configuration: { (cell, item, indexPath) -> Void in
+            let cell = cell as! UITableViewCell
+            cell.textLabel!.text = "Hi"
+        })
       })
-    }
-  }
-
-  func delay(delay:Double, closure:()->()) {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC))),
-      dispatch_get_main_queue(), closure)
   }
 }
 
